@@ -1,6 +1,12 @@
 package Genetic::Chromosome;
 use Moose;
 
+#TODO:: написать получалку чисел из двоичного
+#TODO:: написать получалку чисел из грея
+#TODO:: написать мутацию
+#TODO:: написать кроссовер
+#TODO:: написать поиск лучшего решения в спсике
+
 use random qw/ integer /;
 
 has gene_count => ( is => 'rw', isa => 'Int' );
@@ -25,17 +31,18 @@ sub init {
 
 }
 
+sub get_values {
+    my $self = shift;
+    my @values;
+    return @values;
+}
+
 sub cross {
     my $self = shift;
 }
 
 sub mutate {
     my $self = shift;
-
-    foreach ( split( //, $self->value ) ) {
-
-    }
-
 }
 
 1;
