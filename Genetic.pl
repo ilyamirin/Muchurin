@@ -6,9 +6,16 @@ use Chromosome;
 
 BEGIN {
 
-    my $g = Genetic::Gene->new();
+    my %prob;
+    $prob{ mutation } = 50;
+
+    my $g = Genetic::Gene->new( prob => \%prob );
 
     $g->init( 4 );
+
+    $g->print;
+
+    $g->mutate;
 
     $g->print;
 

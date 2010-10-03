@@ -3,6 +3,8 @@ use Moose;
 
 use random qw/ integer /;
 
+has prob => ( is => 'rw', isa => 'HashRef' );
+
 has bits => ( is => 'rw', isa => 'ArrayRef' );
 
 sub init {
@@ -39,14 +41,19 @@ sub get_value {
 
 }
 
+sub mutate {
+    my $self = shift;
+
+    foreach ( @{ $self->bits } ) {
+        $_ = !$_ if rand 101 < $self->prob->{ mutation };
+    }
+
+}
+
 sub print {
     my $self = shift;
     print $_ . " " foreach @{ $self->bits };
     print " \n";
-}
-
-sub mutate {
-    my $self = shift;
 }
 
 1;
