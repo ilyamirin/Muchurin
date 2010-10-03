@@ -29,31 +29,32 @@ sub get_value {
         unshift @unshifted, 0;
         for ( my $j = 0; $j < $digit; $j++ ) {
             $grey[ $j ] ^= $unshifted[ $j ];
-        }#for
-    }#for
+        }
+    }
 
     my $value = 0;
     for ( my $i = 0; $i < scalar @grey; $i++ ) {
         $value += 2 ** ( scalar @grey - $i - 1 ) if $grey[ $i ];
-    }#for
+    }
 
     return $value;
 
-}
+}#get_value
 
 sub mutate {
-    my $self = shift;
+    my ( $self, $prob ) = @_;
 
     foreach ( @{ $self->bits } ) {
-        $_ = !$_ if ( rand 101 ) < $self->prob->{ mutation };
+        $_ = !$_ if ( rand 101 ) < $prob;
     }
 
 }
 
 sub print {
     my $self = shift;
-    print $_ . " " foreach @{ $self->bits };
-    print " \n";
+    print $_ foreach @{ $self->bits };
+    print " | " . $self->get_value . " \n";
+
 }
 
 1;
