@@ -1,8 +1,19 @@
 package Genetic;
 use Moose;
 
-use Gene;
 use Chromosome;
+
+has chromosomes => ( is => 'rw', isa => 'ArrayRef' );
+
+sub cross {
+    my ( $self, $prob ) = @_;
+
+    my $father = $self->chromosomes->[ rand scalar $self->chromosomes ];
+    my $mother = $self->chromosomes->[ rand scalar $self->chromosomes ];
+
+
+
+}
 
 BEGIN {
 

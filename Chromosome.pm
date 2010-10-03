@@ -39,11 +39,6 @@ sub print {
 
 }
 
-sub cross {
-    my ( $self, $prob ) = @_;
-
-}
-
 sub mutate {
     my ( $self, $prob ) = @_;
     $$_->mutate( $prob ) foreach @{ $self->genes };
