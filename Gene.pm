@@ -11,7 +11,7 @@ sub init {
     my ( $self, $digit ) = @_;
 
     my @bits;
-    push @bits , rand 2 for 1..$digit;
+    push @bits, rand 2 for 1..$digit;
 
     $self->bits( \@bits );
 
@@ -45,7 +45,7 @@ sub mutate {
     my $self = shift;
 
     foreach ( @{ $self->bits } ) {
-        $_ = !$_ if rand 101 < $self->prob->{ mutation };
+        $_ = !$_ if ( rand 101 ) < $self->prob->{ mutation };
     }
 
 }
