@@ -9,9 +9,7 @@ sub init {
     my ( $self, $digit ) = @_;
 
     my @bits;
-    for ( my $i = 0; $i < $digit ; $i++ ) {
-        push @bits , rand 2;
-    }
+    push @bits , rand 2 for 1..$digit;
 
     $self->bits( \@bits );
 
@@ -23,24 +21,18 @@ sub get_value {
     my @grey = @{ $self->bits };
     my @unshifted = @grey;
 
-    for ( my $i = 0; $i < ( scalar @grey ) - 1; $i++ ) {
+    my $digit = scalar @grey;
+
+    for ( 2..$digit ) {
         unshift @unshifted, 0;
-        for ( my $j = 0; $j < scalar @grey; $j++ ) {
+        for ( my $j = 0; $j < $digit; $j++ ) {
             $grey[ $j ] ^= $unshifted[ $j ];
         }#for
     }#for
 
-    print "grey \n";
-    print $_ . " " foreach @grey;
-    print " \n";
-
     my $value = 0;
     for ( my $i = 0; $i < scalar @grey; $i++ ) {
-        if ( $grey[ $i ] ) {
-            #print $grey[ $i ] . "+ \n";
-            $value += 2 ** ( scalar @grey - $i - 1 );
-        }
-        #$value += 2 ** ( $grey[ $j ] - $j - 1 ) if $grey[ $j ] ;
+        $value += 2 ** ( scalar @grey - $i - 1 ) if $grey[ $i ];
     }#for
 
     return $value;
