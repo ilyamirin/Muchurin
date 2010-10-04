@@ -3,6 +3,8 @@ use Moose;
 
 use Chromosome;
 
+use random qw/ integer /;
+
 has survival => ( is => 'rw', isa => 'Int' );
 
 has population => ( is => 'rw', isa => 'ArrayRef' );
@@ -26,7 +28,21 @@ sub init {
 sub cross {
     my ( $self, $father, $mother ) = @_;
 
-}
+    my $len = scalar @{ $$father->genes };
+
+    my $descendant = $$father;
+
+    for ( my $i = 0; $i < $len; $i++) {
+        if ( rand 2 ) {
+            $descendant->genes->[ $i ] = $$father->genes->[ $i ];
+        } else {
+            $descendant->genes->[ $i ] = $$mother->genes->[ $i ];
+        }#else if
+    }#for
+
+    return $descendant;
+
+}#cross
 
 sub roulette {
     my ( $self ) = @_;
