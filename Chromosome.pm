@@ -5,6 +5,8 @@ use random qw/ integer /;
 
 use Gene;
 
+has fitness => ( is => 'rw', isa => 'Int' );
+
 has genes => ( is => 'rw', isa => 'ArrayRef' );
 
 sub init {
@@ -31,17 +33,19 @@ sub get_values {
 
 }
 
+sub mutate {
+    my ( $self, $prob ) = @_;
+    $$_->mutate( $prob ) foreach @{ $self->genes };
+
+}
+
+
 sub print {
     my $self = shift;
     foreach my $gene ( @{ $self->genes } ) {
         $$gene->print;
     }
-
-}
-
-sub mutate {
-    my ( $self, $prob ) = @_;
-    $$_->mutate( $prob ) foreach @{ $self->genes };
+    print 'f= ' . $self->fitness . "\n" if defined $self->fitness;
 
 }
 
