@@ -44,12 +44,19 @@ sub cross {
 
 }#cross
 
+sub get_fitnesses {
+    my $self = shift;
+
+    $_->fitness( $self->environment( $_->get_values ) ) foreach
+        @{ $self->population };
+
+}#get_fitnesses
+
 sub roulette {
-    my ( $self ) = @_;
+    my $self = shift;
 
     my @roulette;
-    foreach my $c ( @{ $self->population } ) {
-        $c->fitness( $self->environment( $c->get_values ) );
+    foreach ( @{ $self->population } ) {
         push( @roulette, \$c ) foreach 1..$c->fitness;
     }
 
@@ -63,6 +70,24 @@ sub roulette {
     }
 
     $self->population( \@new_generation );
+
+}
+
+sub get_best {
+    my $self = shift;
+
+    my $best;
+    foreach ( @{ $self->population } ) {
+        $self->roulette;
+    }
+}
+
+sub start {
+    my ( $self, $max_epochs ) = @_;
+
+    foreach ( 1..$max_epochs) {
+        $self->get_fitnesses;
+    }
 
 }
 
