@@ -25,7 +25,7 @@ sub init {
 
 }
 
-sub fitness {
+sub get_fitness {
     my ( $self, $values ) = @_;
 
     my $result;
@@ -33,7 +33,7 @@ sub fitness {
         $result += $values->[ $i ] * $self->k->[ $i ];
     }
 
-    return 1 / abs( $self->c - $result );
+    return 1 / abs( $self->c - $result + 1 );
 
 }
 

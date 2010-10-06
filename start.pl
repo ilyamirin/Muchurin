@@ -29,12 +29,16 @@ BEGIN {
     $d->init( 3 );
     $d->print;
 
-    my $genetic = Genetic->new();
+    my $genetic = Genetic->new( environment => $d );
     $genetic->init( 100, 3, 16 );
     #$genetic->roulette;
     #$genetic->cross( \$c, \$c1 )->print;
 
+    my $best = $genetic->start( 50 );
 
+    print $best;
+
+    print $_ . " " foreach @{ $best->get_values };
 
     print " \n";
 

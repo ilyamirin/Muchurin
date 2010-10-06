@@ -5,7 +5,7 @@ use random qw/ integer /;
 
 use Gene;
 
-has fitness => ( is => 'rw', isa => 'Int' );
+has fitness => ( is => 'rw', isa => 'Num' );
 
 has genes => ( is => 'rw', isa => 'ArrayRef' );
 
