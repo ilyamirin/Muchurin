@@ -6,11 +6,11 @@ use Diofant;
 
 BEGIN {
 
-    #my $g = Genetic::Gene->new();
-    #$g->init( 4 );
-    #$g->print;
-    #$g->mutate( 50 );
-    #$g->print;
+    my $g = Genetic::Gene->new();
+    $g->init( 4 );
+    $g->print;
+    $g->mutate( 50 );
+    $g->print;
     #print "v= " . $g->get_value . "\n";
 
     #my $c = Genetic::Chromosome->new();
@@ -25,20 +25,20 @@ BEGIN {
     #$c1->init( 3, 4 );
     #$c1->print;print " \n";
 
-    my $d = Genetic::Diofant->new();
-    $d->init( 3 );
-    $d->print;
+    #my $d = Genetic::Diofant->new();
+    #$d->init( 3 );
+    #$d->print;
 
-    my $genetic = Genetic->new( environment => $d );
-    $genetic->init( 100, 3, 16 );
+    #my $genetic = Genetic->new( environment => $d );
+    #$genetic->init( 100, 3, 16 );
     #$genetic->roulette;
     #$genetic->cross( \$c, \$c1 )->print;
 
-    my $best = $genetic->start( 50 );
+    #my $best = $genetic->start( 50 );
 
-    print $best;
+    #print $best;
 
-    print $_ . " " foreach @{ $best->get_values };
+    #print $_ . " " foreach @{ $best->get_values };
 
     print " \n";
 

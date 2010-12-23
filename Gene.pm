@@ -9,13 +9,9 @@ has bits => ( is => 'rw', isa => 'ArrayRef' );
 
 sub init {
     my ( $self, $digit ) = @_;
-
-    my @bits;
-    push @bits, rand 2 for 1..$digit;
-
-    $self->bits( \@bits );
-
-}
+    $self->bits( [] );
+    $self->bits->[ $_ ] = rand( 2 ) for 0..$digit-1;
+}#init
 
 sub get_value {
     my $self = shift;
@@ -27,15 +23,12 @@ sub get_value {
 
     for ( 2..$digit ) {
         unshift @unshifted, 0;
-        for ( my $j = 0; $j < $digit; $j++ ) {
-            $grey[ $j ] ^= $unshifted[ $j ];
-        }
+        $grey[ $_ ] ^= $unshifted[ $_ ] for 0..$digit-1;
     }
 
     my $value = 0;
-    for ( my $i = 0; $i < scalar @grey; $i++ ) {
-        $value += 2 ** ( scalar @grey - $i - 1 ) if $grey[ $i ];
-    }
+    $digit--;
+    $value += ( 2 ** ( $digit - $_ ) ) * $grey[ $_ ] for 0..$digit;
 
     return $value;
 
@@ -43,18 +36,14 @@ sub get_value {
 
 sub mutate {
     my ( $self, $prob ) = @_;
-
-    foreach ( @{ $self->bits } ) {
-        $_ = !$_ if ( rand 101 ) < $prob;
-    }
-
-}
+    map { $_ = $_ ? 0 : 1 if rand( 101 ) < $prob } @{ $self->bits };
+}#mutate
 
 sub print {
     my $self = shift;
     print $_ foreach @{ $self->bits };
     print " | " . $self->get_value . " \n";
 
-}
+}#print
 
 1;
