@@ -2,7 +2,6 @@ package Genetic::Chromosome;
 use Moose;
 
 use random qw/ integer /;
-
 use Gene;
 
 has fitness => ( is => 'rw', isa => 'Num' );
@@ -10,17 +9,10 @@ has fitness => ( is => 'rw', isa => 'Num' );
 has genes => ( is => 'rw', isa => 'ArrayRef' );
 
 sub init {
-    my ( $self, $genes, $gene_digit ) = @_;
-
-    my @genes;
-    for ( my $i = 0; $i < $genes ; $i++ ) {
-        my $gene = Genetic::Gene->new();
-        $gene->init( $gene_digit );
-        push @genes, \$gene;
-    }
-
-    $self->genes( \@genes );
-
+    my ( $self, $genes_count, $gene_digit ) = @_;
+    my $genes = [];
+    $genes->[ $_ ] = Genetic::Gene->new->init( $gene_digit ) for 0..$genes_count-1;
+    $self->genes( $genes );
 }
 
 sub get_values {

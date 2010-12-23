@@ -11,6 +11,7 @@ sub init {
     my ( $self, $digit ) = @_;
     $self->bits( [] );
     $self->bits->[ $_ ] = rand( 2 ) for 0..$digit-1;
+    return \$self;
 }#init
 
 sub get_value {
