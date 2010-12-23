@@ -3,16 +3,16 @@ use Moose;
 
 use random qw/ integer /;
 
-has prob => ( is => 'rw', isa => 'HashRef' );
-
 has bits => ( is => 'rw', isa => 'ArrayRef' );
 
-sub init {
-    my ( $self, $digit ) = @_;
+has digit => ( is => 'rw', isa => 'Int', default => 0 );
+
+sub BUILD {
+    my ( $self ) = @_;
     $self->bits( [] );
-    $self->bits->[ $_ ] = rand( 2 ) for 0..$digit-1;
+    $self->bits->[ $_ ] = rand( 2 ) for 0..$self->digit-1;
     return \$self;
-}#init
+}#BUILD
 
 sub get_value {
     my $self = shift;
@@ -20,16 +20,13 @@ sub get_value {
     my @grey = @{ $self->bits };
     my @unshifted = @grey;
 
-    my $digit = scalar @grey;
-
-    for ( 2..$digit ) {
+    for ( 2..$self->digit ) {
         unshift @unshifted, 0;
-        $grey[ $_ ] ^= $unshifted[ $_ ] for 0..$digit-1;
+        $grey[ $_ ] ^= $unshifted[ $_ ] for 0..$self->digit-1;
     }
 
     my $value = 0;
-    $digit--;
-    $value += ( 2 ** ( $digit - $_ ) ) * $grey[ $_ ] for 0..$digit;
+    $value += ( 2 ** ( $self->digit - $_ - 1  ) ) * $grey[ $_ ] for 0..$self->digit-1;
 
     return $value;
 

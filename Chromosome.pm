@@ -12,6 +12,7 @@ sub init {
     my ( $self, $genes_count, $gene_digit ) = @_;
     $self->genes( [] );
     $self->genes->[ $_ ] = Genetic::Gene->new->init( $gene_digit ) for 0..$genes_count-1;
+    return \$self;
 }
 
 sub get_values {
@@ -27,7 +28,8 @@ sub mutate {
 sub print {
     my $self = shift;
     map { $$_->print } @{ $self->genes };
-    print 'f= ' . $self->fitness . "\n" if defined $self->fitness;
+    print 'f= ' . $self->fitness if defined $self->fitness;
+    print "\n";
 }
 
 1;

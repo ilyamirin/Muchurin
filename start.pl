@@ -6,22 +6,21 @@ use Diofant;
 
 BEGIN {
 
-    #my $g = Genetic::Gene->new();
-    #$g->init( 4 );
-    #$g->print;
-    #$g->mutate( 50 );
-    #$g->print;
+    my $g = Genetic::Gene->new( digit => 4 );
+    $g->print;
+    $g->mutate( 50 );
+    $g->print;
 
-    my $c = Genetic::Chromosome->new();
-    $c->init( 3, 4 );
-    $c->print;
-    $c->mutate( 50 );
-    $c->print;
+    #my $c = Genetic::Chromosome->new();
+    #$c->init( 3, 4 );
+    #$c->print;
+    #$c->mutate( 50 );
+    #$c->print;
     #print "$_ " for $c->get_values;
 
     #my $c1 = Genetic::Chromosome->new();
     #$c1->init( 3, 4 );
-    #$c1->print;print " \n";
+    #$c1->print;
 
     #my $d = Genetic::Diofant->new();
     #$d->init( 3 );
