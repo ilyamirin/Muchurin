@@ -6,13 +6,21 @@ use Gene;
 
 has fitness => ( is => 'rw', isa => 'Num' );
 
-has genes => ( is => 'rw', isa => 'ArrayRef' );
+has genes => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 
-sub init {
-    my ( $self, $genes_count, $gene_digit ) = @_;
-    $self->genes( [] );
-    $self->genes->[ $_ ] = Genetic::Gene->new->init( $gene_digit ) for 0..$genes_count-1;
-    return \$self;
+sub BUILDARGS {
+    my $self = shift;
+
+    my %params = ( @_ );
+    $params{ genes } = [ ];
+
+    for ( 0..$params{ genes_count }-1 ) {
+        $params{ genes }->[ $_ ] =
+            \Genetic::Gene->new( digit => $params{ gene_digit } );
+    }
+
+    return \%params;
+
 }
 
 sub get_values {
@@ -29,7 +37,7 @@ sub print {
     my $self = shift;
     map { $$_->print } @{ $self->genes };
     print 'f= ' . $self->fitness if defined $self->fitness;
-    print "\n";
+
 }
 
 1;

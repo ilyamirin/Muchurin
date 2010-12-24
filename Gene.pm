@@ -11,7 +11,6 @@ sub BUILD {
     my ( $self ) = @_;
     $self->bits( [] );
     $self->bits->[ $_ ] = rand( 2 ) for 0..$self->digit-1;
-    return \$self;
 }#BUILD
 
 sub get_value {
