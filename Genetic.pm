@@ -9,23 +9,27 @@ has survival => ( is => 'rw', isa => 'Int' );
 
 has whole_fitness => ( is => 'rw', isa => 'Num' );
 
-has population => ( is => 'rw', isa => 'ArrayRef' );
+has population => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 
 has environment => ( is => 'rw', isa => 'Object' );
 
-sub init {
-    my ( $self, $chromosomes, $genes, $gene_digit ) = @_;
+sub BUILDARGS {
+    my $self = shift;
 
-    my @population;
-    foreach ( 1..$chromosomes ) {
-        my $chromosome = Genetic::Chromosome->new();
-        $chromosome->init( $genes, $gene_digit );
-        push @population, $chromosome;
+    my %params = ( @_ );
+
+    $params{ population } = [];
+
+    for ( 0..$params{ chromosomes_count }-1 ) {
+        $params{ population }->[ $_ ] = \Genetic::Chromosome->new(
+            genes_count => $params{ genes_count },
+            gene_digit  => $params{ gene_digit },
+        );
     }
 
-    $self->population( \@population );
+    return \%params;
 
-}
+}#BUILDARGS
 
 sub cross {
     my ( $self, $father, $mother ) = @_;
@@ -117,5 +121,10 @@ sub start {
     return $best;
 
 }#start
+
+sub print {
+    my $self = shift;
+    map { print $$_->print . "\n" } @{ $self->population };
+}
 
 1;

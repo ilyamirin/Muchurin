@@ -11,11 +11,11 @@ BEGIN {
     #$g->mutate( 50 );
     #$g->print;
 
-    my $c = Genetic::Chromosome->new( genes_count => 3, gene_digit => 4 );
-    $c->print;
-    $c->mutate( 50 );
-    $c->print;
-    print "$_ " for $c->get_values;
+    #my $c = Genetic::Chromosome->new( genes_count => 3, gene_digit => 4 );
+    #$c->print;
+    #$c->mutate( 50 );
+    #$c->print;
+    #print "$_ " for $c->get_values;
 
     #my $c1 = Genetic::Chromosome->new();
     #$c1->init( 3, 4 );
@@ -25,8 +25,14 @@ BEGIN {
     #$d->init( 3 );
     #$d->print;
 
-    #my $genetic = Genetic->new( environment => $d );
-    #$genetic->init( 100, 3, 16 );
+    my $genetic = Genetic->new(
+        chromosomes_count => 2,
+        genes_count       => 3,
+        gene_digit        => 4,
+    );
+
+    $genetic->print;
+
     #$genetic->roulette;
     #$genetic->cross( \$c, \$c1 )->print;
 

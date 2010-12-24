@@ -15,8 +15,9 @@ sub BUILDARGS {
     $params{ genes } = [ ];
 
     for ( 0..$params{ genes_count }-1 ) {
-        $params{ genes }->[ $_ ] =
-            \Genetic::Gene->new( digit => $params{ gene_digit } );
+        $params{ genes }->[ $_ ] = \Genetic::Gene->new(
+            digit => $params{ gene_digit }
+        );
     }
 
     return \%params;
