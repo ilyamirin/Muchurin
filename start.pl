@@ -34,7 +34,7 @@ BEGIN {
     $genetic->print;
 
     #$genetic->roulette;
-    #$genetic->cross( \$c, \$c1 )->print;
+    $genetic->cross( $genetic->genome->[ 0 ], $genetic->genome->[ 1 ] )->print;
 
     #my $best = $genetic->start( 50 );
 

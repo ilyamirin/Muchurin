@@ -9,19 +9,17 @@ has survival => ( is => 'rw', isa => 'Int' );
 
 has whole_fitness => ( is => 'rw', isa => 'Num' );
 
-has population => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
-
-has environment => ( is => 'rw', isa => 'Object' );
+has genome => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 
 sub BUILDARGS {
     my $self = shift;
 
     my %params = ( @_ );
 
-    $params{ population } = [];
+    $params{ genome } = [];
 
     for ( 0..$params{ chromosomes_count }-1 ) {
-        $params{ population }->[ $_ ] = \Genetic::Chromosome->new(
+        $params{ genome }->[ $_ ] = \Genetic::Chromosome->new(
             genes_count => $params{ genes_count },
             gene_digit  => $params{ gene_digit },
         );
@@ -34,17 +32,16 @@ sub BUILDARGS {
 sub cross {
     my ( $self, $father, $mother ) = @_;
 
-    my $len = scalar @{ $father->genes };
+    my $len = scalar @{ $$father->genes };
 
-    my $descendant = $father;
+    my $descendant = $$father;
 
-    for ( my $i = 0; $i < $len; $i++ ) {
-        if ( rand 2 ) {
-            $descendant->genes->[ $i ] = $father->genes->[ $i ];
-        } else {
-            $descendant->genes->[ $i ] = $mother->genes->[ $i ];
-        }#else if
-    }#for
+    for my $gene ( 0..$len-1 ) {
+        for my $bit ( 0..${ $descendant->genes->[ $gene ] }->digit-1 ) {
+            ${ $descendant->genes->[ $gene ] }->bits->[ $bit ] =
+                ${ $$mother->genes->[ $gene ] }->bits->[ $bit ] if rand 2;
+        }
+    }
 
     return $descendant;
 
@@ -124,7 +121,7 @@ sub start {
 
 sub print {
     my $self = shift;
-    map { print $$_->print . "\n" } @{ $self->population };
+    map { print $$_->print . "\n" } @{ $self->genome };
 }
 
 1;
