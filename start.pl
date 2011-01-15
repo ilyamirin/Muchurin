@@ -1,8 +1,10 @@
 package Start;
-use Moose;
 
 use Genetic;
-use Diofant;
+
+sub diofant {
+    1;
+}
 
 BEGIN {
 
@@ -26,15 +28,19 @@ BEGIN {
     #$d->print;
 
     my $genetic = Genetic->new(
-        chromosomes_count => 2,
-        genes_count       => 3,
-        gene_digit        => 4,
+        population   => 2,
+        genes_count  => 3,
+        gene_digit   => 4,
+        fitness_func => \&diofant,
     );
 
     $genetic->print;
 
-    #$genetic->roulette;
-    $genetic->cross( $genetic->genome->[ 0 ], $genetic->genome->[ 1 ] )->print;
+    $genetic->roulette;
+
+    #print $genetic->winner->fitness;
+    
+    #$genetic->cross( $genetic->genome->[ 0 ], $genetic->genome->[ 1 ] )->print;
 
     #my $best = $genetic->start( 50 );
 

@@ -7,27 +7,33 @@ use random qw/ integer /;
 
 has survival => ( is => 'rw', isa => 'Int' );
 
-has whole_fitness => ( is => 'rw', isa => 'Num' );
+has population => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 
-has genome => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+has fitness_func => ( is => 'rw', isa => 'Ref' );
 
-sub BUILDARGS {
-    my $self = shift;
+around BUILDARGS => sub {
+    my $orig = shift;
+    my $class = shift;
 
     my %params = ( @_ );
 
     $params{ genome } = [];
 
-    for ( 0..$params{ chromosomes_count }-1 ) {
-        $params{ genome }->[ $_ ] = \Genetic::Chromosome->new(
+    my $population = $params{ population }-1;
+    $params{ population } = [];
+
+    for ( 0..$population ) {
+        $params{ population }->[ $_ ] = \Genetic::Chromosome->new(
             genes_count => $params{ genes_count },
             gene_digit  => $params{ gene_digit },
         );
     }
 
-    return \%params;
+    @_ = ( %params );
 
-}#BUILDARGS
+    return $class->$orig( @_ );
+
+};#BUILDARGS
 
 sub cross {
     my ( $self, $father, $mother ) = @_;
@@ -47,34 +53,23 @@ sub cross {
 
 }#cross
 
-sub get_fitnesses {
-    my $self = shift;
-
-    $self->whole_fitness( 0 );
-
-    foreach ( @{ $self->population } ) {
-        $_->fitness( $self->environment->get_fitness( $_->get_values ) );
-        $self->whole_fitness( $self->whole_fitness + $_->fitness );
-    }
-
-}#get_fitnesses
-
 sub roulette {
     my $self = shift;
 
     my $size = scalar @{ $self->population };
-
-    #my $places_per_fit = $size / $self->whole_fitness;
-    print 'size= ' . $size . "\n";
-    print 'whole_fitness= ' . $self->whole_fitness . "\n";
+    my $whole_fitness = 0;
+    my $fit_func = $self->fitness_func;
+    
+    foreach ( @{ $self->population } ) {
+        $whole_fitness += $$_->fitness( &$fit_func( $$_->get_values ) );         
+    }
 
     my @roulette;
     foreach my $c ( @{ $self->population } ) {
         #print $c->fitness / $self->whole_fitness * $size . "\n";
-        push( @roulette, $c ) foreach 1..( $c->fitness / $self->whole_fitness * $size );
+        push( @roulette, $c ) foreach 1..( $$c->fitness / $whole_fitness * $size );
     }
 
-    #print @roulette . "\n";
     $size = scalar @roulette;
 
     my @new_generation;
@@ -91,16 +86,18 @@ sub roulette {
 
 }
 
-sub get_best {
+sub winner {
     my $self = shift;
 
     my $best = $self->population->[ 0 ];
-    foreach ( @{ $self->population } ) {
-        #print $best->fitness ." \n";
-        $best = $_ if $_->fitness > $best->fitness;
-    }
 
-    return $best;
+    my @fitness = map { $_->fitness } @{ $self->population };
+
+    print 'fit ' . @fitness . "\n";
+    
+    return $self->population->[ $fitness[ 0 ] ];
+    
+    #$best = $_ if $_->fitness > $best->fitness for @{ $self->population };    
 
 }#get_best
 
@@ -121,7 +118,7 @@ sub start {
 
 sub print {
     my $self = shift;
-    map { print $$_->print . "\n" } @{ $self->genome };
+    map { print $$_->print . "\n" } @{ $self->population };
 }
 
 1;
